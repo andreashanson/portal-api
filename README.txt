@@ -1,3 +1,9 @@
+#Make sure you have docker installed on your computer.
+
+# Start a mongoDB with docker.
+docker container run -it -d -p 27017:27017 mongo
+Type docker ps to make sure it is up and running.
+
 # Set environment variables for local development.
 export X_TOKEN="TRALALALALA"
 export MONGO_URI="mongodb://localhost:27017/portalconfigs"
