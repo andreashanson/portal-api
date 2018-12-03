@@ -110,6 +110,7 @@ router.get('/api/customers/:id/portals/', function(req, res) {
 
 router.post('/api/portals/createfake', (req, res) => {
   if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
+  let portals = [];
   for (var i=0; i<configs.length; i++) {
     let data = {
       portaltype: configs[i].portaltype,
@@ -121,10 +122,12 @@ router.post('/api/portals/createfake', (req, res) => {
     }
     Portal.create(data, (err, portal) => {
       if (err) return res.status(400).json({message: "Error", error: err});
+      portals.push(portal);
+      if (portals.length == configs.length) {
+        return res.status(200).json({message: "Success!", portals: portals});
+      }
     });
   }
-  // Maybe need to move this inside callback of create.
-  res.json(configs);
 });
 
 
