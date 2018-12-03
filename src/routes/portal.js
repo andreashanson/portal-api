@@ -8,6 +8,8 @@ const configs = require('./fake_configs');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
+
+
 router.get('/api/portals', function(req, res, next) {
   if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
   Portal.find({}, (err, portals) => {
