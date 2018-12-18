@@ -8,6 +8,9 @@ Type docker ps to make sure it is up and running.
 export X_TOKEN="TRALALALALA"
 export MONGO_URI="mongodb://localhost:27017/portalconfigs"
 
+# Set APP_HOST variable to make it work with swagger.
+export APP_HOST="127.0.0.1:3000"
+
 The X_TOKEN Variable you set here is the one you shall use when making requests to the API for auth's.
 
 Then run "npm start"
@@ -41,3 +44,13 @@ docker container run -it -p 27017:27017 --name my-mongo mongo
 When its up and running
 
 make sure you have mongo installed on your computer. Then type mongo localhost:27017 and it will connect to your mongodb
+
+# Build docker image.
+docker build -t harbor.api.aws.icomera.com/custom/andreas:tag .
+
+# Push docker image
+docker push harbor.api.aws.icomera.com/custom/andreas:tag
+
+# Deploy docker image with kubectl
+Change deployment file to tag that you just pushed.
+kubectl apply -f <deployment_file>

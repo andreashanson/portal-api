@@ -1,11 +1,13 @@
 var mongoose = require('mongoose');
 
+// Rename to custom-portal, chocolate-standard, chocolate-media
+// But have to sync with media_api etc.
 var portalSchema = new mongoose.Schema(
   {
     portaltype: {
       required: true,
       type: String,
-      enum: ["custom", "chocolate"]
+      enum: ["custom-portal", "standard-portal", "media-portal"]
     },
     portalname: {
       type: String,
@@ -14,11 +16,15 @@ var portalSchema = new mongoose.Schema(
     },
     customer_id: {
       type: Number,
-      required: false
+      required: true
+    },
+    web_server: {
+      type: String,
+      default: "krut-portals"
     },
     repository: {
       type: String,
-      default: ""
+      required: false
     },
     config: {
       type: Object,
