@@ -37,8 +37,8 @@ router.get('/api/customers/:id/portals/', (req, res) => {
   if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
   const id = req.params.id;
   Portal.find({customer_id: id}, (err, portals) => {
-      if (err) return res.status(400).json({message: "Error", error: err});
-      res.json(portals);
+    if (err) return res.status(400).json({message: "Error", error: err});
+    res.json(portals);
   });
 });
 
@@ -48,7 +48,7 @@ router.get('/api/portals/:portalname/', (req, res) => {
   const portalname = req.params.portalname;
   Portal.find({portalname: portalname}, (err, portal) => {
     if (err) return res.status(400).json({message: "Error", error: err});
-    res.json(portal);
+    res.json(portal[0]);
   });
 });
 
@@ -58,7 +58,30 @@ router.get('/api/portals/:portalname/config', (req, res) => {
   const portalname = req.params.portalname;
   Portal.findOne({portalname: portalname}, (err, portal) => {
     if (err) return res.status(400).json({message: "Error", error: err});
-    res.json(portal.config);
+    if (portal.config) res.json(portal.config);
+    else res.json({});
+  });
+});
+
+
+router.get('/api/portals/:portalname/subset', (req, res) => {
+  if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
+  const portalname = req.params.portalname;
+  Portal.findOne({portalname: portalname}, (err, portal) => {
+    if (err) return res.status(400).json({message: "Error", error: err});
+    if (portal.subset) res.json(portal.subset);
+    else res.json({});
+  });
+});
+
+
+router.get('/api/portals/:portalname/dropdown', (req, res) => {
+  if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
+  const portalname = req.params.portalname;
+  Portal.findOne({portalname: portalname}, (err, portal) => {
+    if (err) return res.status(400).json({message: "Error", error: err});
+    if (portal.dropdown) res.json(portal.dropdown);
+    else res.json({});
   });
 });
 
@@ -70,6 +93,28 @@ router.delete('/api/portals/:id', (req, res) => {
     if (err) return res.status(400).json({message: "Error", error: err});
     if (portal == null) return res.status(400).json({message: "Error", error: "No portal with this id."})
     res.status(200).json({message: "Deleted successfully!", portal: portal});
+  });
+});
+
+
+router.put('/api/portals/:portalname/subset', (req, res) => {
+  if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
+  const portalname = req.params.portalname;
+  const subset = req.body;
+  Portal.findOneAndUpdate({portalname: portalname}, {subset: subset}, (err) => {
+    if (err) return res.status(400).json({message: "Error", error: err});
+    res.json({message: "Subset updated."});
+  });
+});
+
+
+router.put('/api/portals/:portalname/portaltype', (req, res) => {
+  if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
+  const portalname = req.params.portalname;
+  const portaltype = req.body.portaltype;
+  Portal.findOneAndUpdate({portalname: portalname}, {portaltype: portaltype}, (err) => {
+    if (err) return res.status(400).json({message: "Error", error: err});
+    res.json({message: "Portaltype updated."});
   });
 });
 

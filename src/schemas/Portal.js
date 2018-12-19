@@ -20,6 +20,7 @@ var portalSchema = new mongoose.Schema(
     },
     web_server: {
       type: String,
+      enum: ["krut-portals", "whoosh-portals"],
       default: "krut-portals"
     },
     repository: {
@@ -36,6 +37,14 @@ var portalSchema = new mongoose.Schema(
       default: {
         deployed: false
       }
+    },
+    subset: {
+      required: false,
+      type: Object
+    },
+    dropdown: {
+      required: false,
+      type: Object
     }
 	}
 );

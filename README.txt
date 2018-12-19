@@ -11,6 +11,8 @@ export MONGO_URI="mongodb://localhost:27017/portalconfigs"
 # Set APP_HOST variable to make it work with swagger.
 export APP_HOST="127.0.0.1:3000"
 
+make sure you go to 127.0.0.1:3000/api/api-docs if you set APP_HOST to that and not localhost.
+
 The X_TOKEN Variable you set here is the one you shall use when making requests to the API for auth's.
 
 Then run "npm start"
