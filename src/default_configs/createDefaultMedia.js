@@ -1,5 +1,6 @@
 const defaultMediaPortal = {
   "theme":["mediaportal_backend", "jinja_mediaportal2"],
+  "landing_page": "main.html",
   "bgcolor": "#161616",
   "fgcolor": "#E8E8E8",
   "bgcolor2": "#FFFFFF",

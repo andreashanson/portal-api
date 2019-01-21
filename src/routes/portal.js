@@ -28,10 +28,17 @@ getOnePortal — function for getting an portal by ID
 router.get('/api/defaultconfig/:portaltype', (req, res) => {
   if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
   const portaltype = req.params.portaltype;
-  Defaultconfigs.findOne({portaltype: portaltype}, (err, config) => {
-    if (err) return res.status(400).json({message: "Error", error: err});
-    res.json(config)
-  });
+
+  switch (portaltype) {
+    case "standard-portal":
+      res.json(defaultStandardConfig);
+      break;
+    case "media-portal":
+      res.json(defaultMediaConfig);
+      break;
+    default:
+      return res.status(400).json({message: "Unknown portaltype."});
+  }
 });
 
 
@@ -59,18 +66,8 @@ router.get('/api/portals/:portalname/', (req, res) => {
   const portalname = req.params.portalname;
   Portal.find({portalname: portalname}, (err, portal) => {
     if (err) return res.status(400).json({message: "Error", error: err});
-    res.json(portal[0]);
-  });
-});
-
-router.get('/api/portals/:portalname/:mainkey', (req, res) => {
-  //if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
-  const portalname = req.params.portalname;
-  const mainkey = req.params.mainkey;
-  Portal.findOne({portalname: portalname}, (err, portal) => {
-    if (err) return res.status(400).json({message: "Error", error: err});
-    if (portal[mainkey]) res.json(portal[mainkey]);
-    else res.json({});
+    if (portal.length > 0) return res.json(portal[0]);
+    res.json({});
   });
 });
 
@@ -120,7 +117,6 @@ router.put('/api/portals/:portalname/portaltype', (req, res) => {
 
 router.post('/api/portals', (req, res) => {
   if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
-  console.log(req.body);
   //TODO Fix propper validation for req.body
   if (!req.body.portaltype || !req.body.portalname || !req.body.customer_id) {
     return res.status(400).json({message: "Error", error: "Validation Error"});
@@ -130,6 +126,10 @@ router.post('/api/portals', (req, res) => {
     portaltype: req.body.portaltype,
     portalname: req.body.portalname,
     customer_id: parseInt(req.body.customer_id)
+  }
+
+  if (req.body.web_server) {
+    data.web_server = req.body.web_server;
   }
 
   if (req.body.portaltype == "media-portal") data.config = defaultMediaConfig;
@@ -153,55 +153,6 @@ router.post('/api/portals', (req, res) => {
   });
 });
 
-
-//TODO Routes for create fake data. This will be removed in the future.
-router.post('/api/defaultconfigs', (req, res) => {
-  let config;
-  const portaltype = req.body.portaltype;
-  if (portaltype == "standard-portal") {
-    config = defaultStandardConfig;
-  }
-  else if (portaltype == "media-portal") {
-    config = defaultMediaConfig;
-  }
-  const data = {
-    portaltype: portaltype,
-    config: config
-  }
-  Defaultconfigs.create(data, (err, data) => {
-    if (err) return res.status(400).json({message: "error", error: err});
-    res.status(200).json({message: "Success", config: config})
-  });
-});
-
-//TODO Routes for create fake data. This will be removed in the future.
-router.post('/api/portals/createfake', (req, res) => {
-  if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
-  let portals = [];
-  const configs = require('../default_configs/fake_configs');
-
-  Portal.find({}, (err, portals) => {
-    if (err) return res.status(400).json({message: "Error", error: err});
-    if (portals.length !== 0) return res.status(400).json({message: "Error", error: "Portals already in database."});
-    for (var i=0; i<configs.length; i++) {
-      let data = {
-        portaltype: configs[i].portaltype,
-        portalname: configs[i].portalname,
-        customer_id: configs[i].customer_id
-      };
-      if (configs[i].config) {
-        data.config = configs[i].config;
-      }
-      Portal.create(data, (err, portal) => {
-        if (err) return res.status(400).json({message: "Error", error: err});
-        portals.push(portal);
-        if (portals.length == configs.length) {
-          return res.status(200).json({message: "Success!", portals: portals});
-        }
-      });
-    }
-  });
-});
 
 function authenticate(req, res) {
   if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
