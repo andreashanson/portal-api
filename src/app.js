@@ -9,7 +9,7 @@ require('./db');
 app.use(Router);
 
 app.get('/', (req, res) => {
-  res.send("FUCK");
+  res.redirect("/api/api-docs");
 });
 
 const port = process.env.PORT || 3000;
