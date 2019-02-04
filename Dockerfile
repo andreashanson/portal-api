@@ -10,4 +10,7 @@ COPY . .
 
 EXPOSE 3000
 
+ENV X_TOKEN="TRALALALALA"
+ENV MONGO_URI="mongodb://localhost:27017/portals"
+
 CMD ["npm", "start"]

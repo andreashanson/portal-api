@@ -6,7 +6,7 @@ Type docker ps to make sure it is up and running.
 
 # Set environment variables for local development.
 export X_TOKEN="TRALALALALA"
-export MONGO_URI="mongodb://localhost:27017/portalconfigs"
+export MONGO_URI="mongodb://0.0.0.0:27017/portals"
 
 # Set APP_HOST variable to make it work with swagger.
 export APP_HOST="127.0.0.1:3000"
@@ -56,3 +56,7 @@ docker push harbor.api.aws.icomera.com/custom/andreas:tag
 # Deploy docker image with kubectl
 Change deployment file to tag that you just pushed.
 kubectl apply -f <deployment_file>
+
+
+# Denna raden hade jag lagt i min kong ingress av nån anleding
+# mongo.andreas.svc.cluster.local

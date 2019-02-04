@@ -24,6 +24,11 @@ getAllPortals — function for getting all users in the system
 getOnePortal — function for getting an portal by ID
 */
 
+router.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 router.get('/api/defaultconfig/:portaltype', (req, res) => {
   if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
