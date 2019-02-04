@@ -16,20 +16,6 @@ router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 router.use('/api', router);
 
 
-/*
-createPortal — function for creating a new portal in the system
-updatePortal — function for updating an existing portal in the system
-deletePortal — function for deleting an user from the system
-getAllPortals — function for getting all users in the system
-getOnePortal — function for getting an portal by ID
-*/
-
-router.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
 router.get('/api/defaultconfig/:portaltype', (req, res) => {
   if (process.env.X_TOKEN !== req.get("X-Token")) return res.status(400).json({message: "Unauthorized"});
   const portaltype = req.params.portaltype;
