@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "mongoose": "^5.3.14",
     "mongoose-unique-validator": "^2.0.2",
@@ -12,9 +11,12 @@
     "path": "^0.12.7",
     "swagger-ui-express": "^4.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "dotenv": "^7.0.0"
+  },
   "scripts": {
-    "start": "node src/app.js",
+    "start": "NODE_ENV=prodcution node src/app.js",
+    "dev": "NODE_ENV=development node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

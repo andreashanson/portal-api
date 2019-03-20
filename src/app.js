@@ -4,6 +4,7 @@ const parser = require('body-parser');
 const Router = require('./routes');
 
 var app = express();
+
 require('./db');
 
 app.use(Router);
